@@ -12,18 +12,21 @@ int rightMotorBackwardPwm = 9;
 
 // -----------------------------
 // Sensor Pins - Front
-int frontRightMost = A4;      
-int frontRight = A6;
-int frontMiddle =  A3;
-int frontLeft = A7;
-int frontLeftMost = A5;
+
+int frontLeftMost = A9;
+int frontLeft = A8;
+int frontMiddle = A10;
+int frontRight = A1;
+int frontRightMost = A2;
 
 // Sensor Pins - Back
-int BackLeftMost = A9;
-int BackLeft = A8;
-int BackMiddle = A10;
-int BackRight = A1;
-int BackRightMost = A2;
+
+int backRightMost = A4;      
+int backRight = A6;
+int backMiddle =  A3;
+int backLeft = A7;
+int backLeftMost = A5;
+
 
 // -----------------------------
 // Encoder Tick Counters
@@ -78,8 +81,9 @@ void setup() {
   pinMode(frontRight, INPUT);
   pinMode(frontRightMost, INPUT);
 
-  lineFollowUntil(3);
-  //lineFollow();
+  //lineFollowUntil(3);
+ 
+  lineFollow();
 }
 
 // -----------------------------
@@ -121,23 +125,23 @@ void stopMotors() {
 
 // -----------------------------
 // Encoder Movement Functions
-void moveForwardEncoder(int targetTicks, int speed) {
-  leftEncoderTick = 0;
-  rightEncoderTick = 0;
+// void moveForwardEncoder(int targetTicks, int speed) {
+//   leftEncoderTick = 0;
+//   rightEncoderTick = 0;
 
-  moveForward(speed);
+//   moveForward(speed);
 
-  while (leftEncoderTick < targetTicks && rightEncoderTick < targetTicks) {
-    Serial.print("Left Ticks: ");
-    Serial.print(leftEncoderTick);
-    Serial.print(" | Right Ticks: ");
-    Serial.println(rightEncoderTick);
-  }
+//   while (leftEncoderTick < targetTicks && rightEncoderTick < targetTicks) {
+//     Serial.print("Left Ticks: ");
+//     Serial.print(leftEncoderTick);
+//     Serial.print(" | Right Ticks: ");
+//     Serial.println(rightEncoderTick);
+//   }
 
-  stopMotors();
-}
+//   stopMotors();
+// }
 
-void moveBackwardEncoder(int targetTicks, int speed) {
+//void moveBackwardEncoder(int targetTicks, int speed) {
   leftEncoderTick = 0;
   rightEncoderTick = 0;
 
@@ -153,38 +157,38 @@ void moveBackwardEncoder(int targetTicks, int speed) {
   stopMotors();
 }
 
-void moveLeftEncoder(int targetTicks, int speed) {
-  leftEncoderTick = 0;
-  rightEncoderTick = 0;
+// void moveLeftEncoder(int targetTicks, int speed) {
+//   leftEncoderTick = 0;
+//   rightEncoderTick = 0;
 
-  turnLeft(speed);
+//   turnLeft(speed);
 
-  while (leftEncoderTick < targetTicks && rightEncoderTick < targetTicks) {
-    Serial.print("Left Turn -> Left: ");
-    Serial.print(leftEncoderTick);
-    Serial.print(" | Right: ");
-    Serial.println(rightEncoderTick);
-  }
+//   while (leftEncoderTick < targetTicks && rightEncoderTick < targetTicks) {
+//     Serial.print("Left Turn -> Left: ");
+//     Serial.print(leftEncoderTick);
+//     Serial.print(" | Right: ");
+//     Serial.println(rightEncoderTick);
+//   }
 
-  stopMotors();
+//   stopMotors();
+// }
+
+// void moveRightEncoder(int targetTicks, int speed) {
+//   leftEncoderTick = 0;
+//   rightEncoderTick = 0;
+
+//   turnRight(speed);
+
+//   while (leftEncoderTick < targetTicks && rightEncoderTick < targetTicks) {
+//     Serial.print("Right Turn -> Left: ");
+//     Serial.print(leftEncoderTick);
+//     Serial.print(" | Right: ");
+//     Serial.println(rightEncoderTick);
+//   }
+
+//   stopMotors();
+// }
 }
-
-void moveRightEncoder(int targetTicks, int speed) {
-  leftEncoderTick = 0;
-  rightEncoderTick = 0;
-
-  turnRight(speed);
-
-  while (leftEncoderTick < targetTicks && rightEncoderTick < targetTicks) {
-    Serial.print("Right Turn -> Left: ");
-    Serial.print(leftEncoderTick);
-    Serial.print(" | Right: ");
-    Serial.println(rightEncoderTick);
-  }
-
-  stopMotors();
-}
-
 // -----------------------------
 // Sensor Reading Function
 void readSensors() {
@@ -226,17 +230,24 @@ void lineFollow() {
 
   if (frontL == 1 && frontC == 0 && frontR == 1) {
     moveForward(60);
-  } else if ((frontL == 0 && frontC == 0 && frontR == 1) || (frontL == 0 && frontC == 1 && frontR == 1)) {
+    Serial.print("Farword");
+  }
+   else if ((frontL == 0 && frontC == 0 && frontR == 1) || (frontL == 0 && frontC == 1 && frontR == 1)) {
     turnLeft(60);
-  } else if ((frontL == 1 && frontC == 0 && frontR == 0) || (frontL == 1 && frontC == 1 && frontR == 0)) {
+  } 
+  else if ((frontL == 1 && frontC == 0 && frontR == 0) || (frontL == 1 && frontC == 1 && frontR == 0)) {
     turnRight(60);
-  } else if (!frontLM && !frontL && frontC && frontR && frontRM) {
+  }
+   else if (!frontLM && !frontL && frontC && frontR && frontRM) {
     turnLeft(60);
-  } else if (!frontLM && frontL && frontC && frontR && frontRM) {
+  } 
+  else if (!frontLM && frontL && frontC && frontR && frontRM) {
     turnLeft(60);
-  } else if (frontLM && !frontL && frontC && frontR && frontRM) {
+  } 
+  else if (frontLM && !frontL && frontC && frontR && frontRM) {
     turnLeft(60);
-  } else if (frontLM && frontL && frontC && !frontR && !frontRM) {
+  } 
+  else if (frontLM && frontL && frontC && !frontR && !frontRM) {
     turnRight(60);
   } else if (frontLM && frontL && frontC && frontR && !frontRM) {
     turnRight(60);
